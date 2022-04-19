@@ -1,3 +1,4 @@
 # utnjava
 almacenar código de clases
-Estudiante de Ingeniería en Sistemas de Información
+de JAVA
+Ingeniería en Sistemas de Información
