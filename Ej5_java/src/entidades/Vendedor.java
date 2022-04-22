@@ -4,6 +4,14 @@ public class Vendedor extends Empleado {
 	
 	private int porcenComision;
 	private int totalVentas;
+	
+	public Vendedor(int dni, String apellido, String nombre, String mail, double sueldoBase, int porcenComision,
+			int totalVentas) {
+		super(dni, apellido, nombre, mail, sueldoBase);
+		this.porcenComision = porcenComision;
+		this.totalVentas = totalVentas;
+	}
+	
 	public int getPorcenComision() {
 		return porcenComision;
 	}
@@ -18,7 +26,14 @@ public class Vendedor extends Empleado {
 	}
 	
 	public double getSueldo() {
-		return getSueldoBase() + (this.getPorcenComision()*this.getTotalVentas() / 100);
+		return this.getSueldoBase() + (this.getPorcenComision()*this.getTotalVentas() / 100.0);
 	}
+
+	@Override
+	public String toString() {
+		return "Vendedor [" + super.toString() + ", sueldo=$" + this.getSueldo()+"]";
+	}
+	
+	
 	
 }

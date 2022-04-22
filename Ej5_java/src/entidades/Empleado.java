@@ -5,7 +5,15 @@ public abstract class Empleado {
 	private String apellido;
 	private String nombre;
 	private String mail;
-	private static double sueldoBase = 10000;
+	private double sueldoBase;
+	
+	public Empleado(int dni, String apellido, String nombre, String mail, double sueldoBase) {
+		this.dni = dni;
+		this.apellido = apellido;
+		this.nombre = nombre;
+		this.mail = mail;
+		this.sueldoBase = sueldoBase;
+	}
 	
 	public int getDni() {
 		return dni;
@@ -16,11 +24,11 @@ public abstract class Empleado {
 	public String getApellido() {
 		return apellido;
 	}
-	public static double getSueldoBase() {
+	public double getSueldoBase() {
 		return sueldoBase;
 	}
-	public static void setSueldoBase(int sueldoBase) {
-		Empleado.sueldoBase = sueldoBase;
+	public void setSueldoBase(int sueldoBase) {
+		this.sueldoBase = sueldoBase;
 	}
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
@@ -37,7 +45,13 @@ public abstract class Empleado {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
+
+	@Override
+	public String toString() {
+		return "dni=" + dni + ", apellido=" + apellido + ", nombre=" + nombre;
+	}
 	
 	
+		
 
 }
