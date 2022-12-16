@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entities.Alumno;
+import entities.Persona;
 import logic.AlumnoABMC;
 
 /**
@@ -44,7 +45,27 @@ public class Update extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Alumno a = (Alumno) request.getSession().getAttribute("user");
+		String opc = request.getParameter("opc")!=null?request.getParameter("opc"):"";
+		AlumnoABMC mAlumno = new AlumnoABMC();
+		Alumno a = null;
+		Persona p = null;
+		String urlBack = null;
+		
+		if(opc.equals("")) {
+			a = (Alumno) request.getSession().getAttribute("user");
+			urlBack = "WEB-INF/editar.jsp";
+		}
+		else if(opc.equals("agregar")){
+			p = (Persona) request.getSession().getAttribute("user");
+			a = new Alumno();
+			urlBack = "WEB-INF/agregar-alumno.jsp";
+		} else if(opc.equals("editar")) {
+			p = (Persona) request.getSession().getAttribute("user");
+			a = new Alumno();
+			a.setIdAlumno(Integer.parseInt(request.getParameter("id")));
+			a = mAlumno.getById(a);
+			urlBack = "WEB-INF/editar.jsp";
+		}
 		
 		String nombre = request.getParameter("first-name");
 		request.setAttribute("nom", nombre);
@@ -52,6 +73,7 @@ public class Update extends HttpServlet {
 		String email = request.getParameter("email");
 		String dni = request.getParameter("dni");
 		String tel = request.getParameter("tel");
+		String esRegular = request.getParameter("isregular")!=null?request.getParameter("isregular"):"";
 		LocalDate fechaNac;
 		try {
 			fechaNac = LocalDate.parse(request.getParameter("date-birth")); //devuelve formato: yyyy-mm-dd
@@ -60,9 +82,6 @@ public class Update extends HttpServlet {
 		}
 		
 		if(!nombre.isEmpty() && !apellido.isEmpty() && !email.isEmpty() && !dni.isEmpty() && !tel.isEmpty() && !fechaNac.equals(null)) {
-			if(!(nombre.equalsIgnoreCase(a.getNombre()) && apellido.equalsIgnoreCase(a.getApellido())
-					&& email.equalsIgnoreCase(a.getMail()) && dni.equalsIgnoreCase(a.getDni()) 
-					&& tel.equalsIgnoreCase(a.getTel()) && fechaNac.equals(a.getFechaNac()))) {
 			Pattern patEmail = Pattern.compile("^([0-9a-zA-Z]+[-._+&])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}$");
 			Matcher matcherEmail = patEmail.matcher(email);
 			Pattern patDni = Pattern.compile("[0-9]{8}");
@@ -76,29 +95,56 @@ public class Update extends HttpServlet {
 					a.setDni(dni);
 					a.setTel(tel);
 					a.setFechaNac(fechaNac);
-					AlumnoABMC mAlumno = new AlumnoABMC();
-					mAlumno.updAlumno(a);
-					String msgSuccess = "Actualización exitosa!";
-					request.setAttribute("msg", msgSuccess);
-					request.getSession().setAttribute("user", a);
-					request.getRequestDispatcher("WEB-INF/editar.jsp").forward(request, response);
+					if(opc.equals("") || opc.equals("editar")) {
+						if(opc.equals("editar")) {
+							a.setRegular(!(esRegular.equals("")));
+						}
+						mAlumno.updAlumno(a);
+						String msgSuccess = "Actualización exitosa!";
+						request.setAttribute("msg", msgSuccess);
+						if(opc.equals("")) {
+							request.getSession().setAttribute("user", a);
+						} else if(opc.equals("editar")) {
+							request.setAttribute("mi-alumno", a);
+						}
+						request.getRequestDispatcher(urlBack).forward(request, response);
+					} else if(opc.equals("agregar")) {					
+						String password = request.getParameter("password");
+						Pattern patPw = Pattern.compile("^(?=\\w*\\d)(?=\\w*[a-z])\\S{3,16}$");
+						Matcher matcherPw = patPw.matcher(password);
+						if (matcherPw.matches() && !(p.equals(null))) {
+							a.setPassword(password);							
+							mAlumno.addAlumno(a);
+							a = mAlumno.getByDocumento(a);
+							String msgSuccess = "Alumno añadido! ID: "+a.getIdAlumno()+". Legajo: "+a.getLegajo();
+							request.setAttribute("msg", msgSuccess);
+							request.setAttribute("alumnos", mAlumno.getAll());
+							request.getRequestDispatcher("WEB-INF/listado-alumnos.jsp").forward(request, response);		
+						} else {
+							String val = "Contraseña inválida.";
+							request.setAttribute("validaciones", val);
+							request.getRequestDispatcher(urlBack).forward(request, response);
+						}
+					} else {
+						String val = "Acceso indebido";
+						if(opc.equals("editar")) {request.setAttribute("mi-alumno", a);}
+						request.setAttribute("validaciones", val);
+						request.getRequestDispatcher(urlBack).forward(request, response);
+					}
 				} else {
 					String val = "";
 					if(!matcherEmail.matches()) {val = val + "Correo inválido. ";};
 					if(!matcherDni.matches()) {val = val + "DNI inválido. ";};
 					if(!matcherTel.matches()) {val = val + "Teléfono inválido.";};
 					request.setAttribute("validaciones", val);
-					request.getRequestDispatcher("WEB-INF/editar.jsp").forward(request, response);		
+					if(opc.equals("editar")) {request.setAttribute("mi-alumno", a);}
+					request.getRequestDispatcher(urlBack).forward(request, response);		
 				}
-			} else {
-				String val = "No hay cambios";
-				request.setAttribute("validaciones", val);
-				request.getRequestDispatcher("WEB-INF/editar.jsp").forward(request, response);
-			}
 		} else {
 			String val = "Complete todos los campos";
+			if(opc.equals("editar")) {request.setAttribute("mi-alumno", a);}
 			request.setAttribute("validaciones", val);
-			request.getRequestDispatcher("WEB-INF/editar.jsp").forward(request, response);
+			request.getRequestDispatcher(urlBack).forward(request, response);
 		}
 	}
 

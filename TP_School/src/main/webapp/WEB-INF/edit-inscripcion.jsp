@@ -1,9 +1,6 @@
-<%@ page import="entities.Alumno" %>
-<%@ page import="java.util.LinkedList" %>
-<%@ page import="entities.Inscripcion" %>
-<%@ page import="entities.Curso" %>
-<%@ page import="java.time.LocalDate"  %>
-<%@ page import="java.util.LinkedList" %>
+<%@page import="java.util.LinkedList"%>
+<%@ page import="entities.*" %>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -34,46 +31,55 @@
     <link href="style/fechas.css" rel="stylesheet">
 	
     <% Alumno a = (Alumno) session.getAttribute("user");
-    LinkedList<Inscripcion> li = (LinkedList<Inscripcion>) request.getAttribute("inscripciones");%>
+    Curso c = (Curso) request.getAttribute("disponible");%>
 </head>
-<body style="background-color: #07393b; <%=li.size()>3?"height: fit-content":""%>">
-<div class="bg-light px-5" style="width:800px;margin: 10px;padding:20px; border-radius: 15px">
-<div class="form-row" style="position: relative">
-<span style="color: #6c757d"><i class="fa fa-history fa-2x pb-4 pt-4 pl-3"></i></span>
-<div class="align-middle">
-  <h1 class="h3 text-secondary pb-4 pt-4 pl-4 pr-5">Inscripciones - Historial</h1>
-</div>
-<div class="align-middle">
-<a class="btn btn-primary mt-4 mb-4" href="signin?option=inscribir" style="margin-left: 100px;height: 35px;width: 170px">+ Añadir inscripción</a>
-</div>
-</div>
-<% if(request.getAttribute("validaciones") != null) {%>
+<body style="background-color: #07393b">
+<div class="bg-light" style="margin: 10px; padding:30px; border-radius: 15px">
+<form action="new-inscription" method="post">
+<div class="form-row">
+  <div>
+  	<span style="color: #6c757d"><i class="fa fa-folder-plus fa-2x pb-4 pt-3 pl-3"></i></span>
+  </div>
+  <div class="align-middle">
+  	<h1 class="text-secondary pb-4 pt-3 px-4" style="font-size: 1.5em">Nueva Inscripcion</h1>
+  </div>
+ <% if(request.getAttribute("validaciones") != null) {%>
       <div class="alert-danger alert alert-dismissable align-middle">
       	${requestScope.validaciones}
       </div>
   <% } %>
-  <% if(request.getAttribute("msg") != null) {%>
-      <div class="alert alert-success" role="alert">
-      	<span><i class="fa fa-check-circle"></i></span>
-      	${requestScope.msg}
-      </div>
-<% } %>
-<ol class="list-group list-group w-100">
-<% for (Inscripcion ins : li) { %>
-  <li class="list-group-item d-flex justify-content-between align-items-start">
-    <div class="ms-2 me-auto">
-      <div class="h4 fw-bold mr-5"><%=ins.getCurso().getNombre() %> año</div>
-      <p class="mt-3" style="margin-bottom: 0">Modalidad: <%=ins.getCurso().getModalidad() %></p>
-      <% if(ins.getFechaInscripcion().plusMonths(2).isAfter(LocalDate.now())) { %>
-      <a href="signin?option=editinscription" class="mt-3" style="margin-bottom: 0">Editar</a>
-      <a href="signin?option=deleteinscription" class="mt-3" style="margin-bottom: 0">Eliminar</a>
-      <% } %>
-    </div>
-    <small class="text-muted"><%=ins.getFechaInscripcionFormato() %></small>
-  </li>
- <% } %>
-</ol>
-<a class="btn btn-lg btn-secondary btn-block mt-4" href="signin?option=main" style="float: right;width: 170px; height: 48px">Volver</a>
 </div>
+<input type="hidden" id="opc" name="opc" value="editarinscripcion">
+<div class="form-row" >
+<div class="col-md-2 mb-3">
+      <label for="validationDefault01">Legajo</label>
+      <input type="text" class="form-control" id="validationDefault01" name="legajo" required placeholder="Legajo" 
+      value="<%=session.getAttribute("user")!=null?a.getLegajo():""%>" <%=session.getAttribute("user")!=null?"disabled":"" %>>  
+</div>
+<div class="col-md-4 mb-3 mx-2">
+<label for="cur">Curso</label>
+<select id="cur" name="cur" required class="form-select" onchange="cargaModalidad();" aria-label="Select course">
+  <option value="" disabled>Seleccione curso...</option>
+  <% if(c != null) { %>
+  <option  selected value="<%=c.getNombre()%>"><%=c.getNombre()%> año</option>
+  <% } %>
+</select>
+</div>
+<div class="col-md-4 mb-3">
+<label for="mod">Modalidad</label>
+<select id="mod" name="mod" required onfocus="cargaModalidad();" class="form-select" aria-label="Select mod">
+  <option value="" disabled selected>Seleccione modalidad...</option>
+  
+</select>
+</div>
+</div>
+<div class="row align-bottom">
+<button class="btn btn-lg btn-primary btn-block mt-4 ml-3 mr-4" type="submit" style="width: 190px;height: 48px;background-color: #07393b">
+<span><i class="fa fa-pen"></i></span> Editar</button>
+<a class="btn btn-lg btn-secondary btn-block mt-4" href="signin?option=inscription" style="width: 160px; height: 48px">Volver</a>
+</div>
+</form>
+</div>
+<script src="style/manejo-select.js"></script>
 </body>
 </html>

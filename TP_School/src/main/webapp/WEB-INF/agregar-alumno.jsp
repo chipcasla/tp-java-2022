@@ -1,5 +1,3 @@
-<%@ page import="entities.Alumno" %>
-<%@ page import="entities.Persona" %>
 <%@ page import="java.time.LocalDate" %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -30,8 +28,7 @@
     <!-- Custom styles for this template -->
     <link href="style/signin.css" rel="stylesheet">
     <link href="style/fechas.css" rel="stylesheet">
-	
-    <% Alumno a = request.getAttribute("mi-alumno")==null?(Alumno) session.getAttribute("user"):(Alumno) request.getAttribute("mi-alumno");%>
+
 </head>
 <body style="background-color: #07393b">
 <div class="bg-light" style="margin: 10px;padding:20px; border-radius: 15px">
@@ -41,33 +38,23 @@
   	<span style="color: #6c757d"><i class="fa fa-user-edit fa-2x pb-4 pt-3 pl-3"></i></span>
   </div>
   <div class="align-middle">
-  	<h1 class="text-secondary pb-4 pt-4 px-4" style="font-size: 1.5em">Formulario - Editar mis datos</h1>
+  	<h1 class="text-secondary pb-4 pt-4 px-4" style="font-size: 1.5em">Formulario - Añadir alumno</h1>
   </div>
-  <% if(request.getAttribute("validaciones") != null) { %>
+  <% if(request.getAttribute("validaciones") != null) {%>
       <div class="alert-danger alert alert-dismissable align-middle">
       	${requestScope.validaciones}
       </div>
   <% } %>
-  <% if(request.getAttribute("msg") != null) {%>
-      <div class="alert alert-success" role="alert">
-      	<span><i class="fa fa-check-circle"></i></span>
-      	${requestScope.msg}
-      </div>
-  <% } %>
   </div>
   <div class="form-row">
-  <% if(session.getAttribute("user").getClass() == Persona.class) { %>
-  	<input type="hidden" id="id" name="id" value="<%=a.getIdAlumno() %>">
-  	<input type="hidden" id="tipo-action" name="opc" value="editar">
-  	
-  <% } %>
+  	<input type="hidden" id="opc" name="opc" value="agregar">
     <div class="col-md-4 mb-3">
       <label for="validationDefault01">Nombre</label>
-      <input type="text" class="form-control" id="validationDefault01" name="first-name" required placeholder="Nombre" value="<%=request.getAttribute("nom")==null?a.getNombre():request.getAttribute("nom")%>" required>
+      <input type="text" value="" class="form-control" id="validationDefault01" name="first-name" required placeholder="Nombre">
     </div>
     <div class="col-md-3 mb-3">
       <label for="validationDefault02">Apellido</label>
-      <input type="text" class="form-control" id="validationDefault02" name="last-name" required placeholder="Apellido" value="<%=a.getApellido()%>" required>
+      <input type="text" value="" class="form-control" id="validationDefault02" name="last-name" placeholder="Apellido" required>
     </div>
     <div class="col-md-5 mb-3">
       <label for="validationDefaultMail">Correo electrónico</label>
@@ -75,40 +62,30 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="inputGroupPrepend2">@</span>
         </div>
-        <input type="email" class="form-control" id="validationDefaultMail" name="email" required placeholder="Correo" value="<%=a.getMail()%>" required>
+        <input type="email" value="" class="form-control" id="validationDefaultMail" name="email" placeholder="Correo" required>
       </div>
     </div>
   </div>
   <div class="form-row">
-  <div class="col-md-2 mb-3">
-    <label for="disabledLegajo">Legajo</label>
-    <input class="form-control" id="disabledLegajo" type="text" required value="<%=a.getLegajo()%>" disabled>
-  </div>
     <div class="col-md-4 mb-3">
       <label for="validationDefault03">Nro. Documento</label>
       <input type="text" inputmode="numeric" pattern="[0-9]{8}" oninvalid="setCustomValidity('Por favor, ingrese sus 8 dígitos de DNI')" onchange="try{setCustomValidity('')}catch(e){}"
-      class="form-control" id="validationDefault03" name="dni" required placeholder="DNI" value="<%=a.getDni()%>" required>
+      class="form-control" id="validationDefault03" name="dni" value="" required placeholder="DNI">
     </div>
     <div class="col-md-3 mb-3">
       <label for="validationDefault04">Teléfono</label>
       <input type="tel" inputmode="numeric" pattern="[0-9]{10}" oninvalid="setCustomValidity('Por favor, ingrese telefono con 10 dígitos  (sin prefijo 15 ni +549)')" onchange="try{setCustomValidity('')}catch(e){}"
-      class="form-control" id="validationDefault04" name="tel" required placeholder="Teléfono" value="<%=a.getTel()%>" required>
+      class="form-control" id="validationDefault04" name="tel" value="" required placeholder="Teléfono">
     </div>
     <div class="col-md-3 mb-3 form-date">
 			<label class="form-date__label" for="input-date">Fecha de nacimiento</label>
-			<input class="form-control form-date__input" type="date" id="input-date" name="date-birth" max="<%=LocalDate.now()%>" required value="<%=a.getFechaNac()%>" />
+			<input class="form-control form-date__input" value="" type="date" id="input-date" max="<%=LocalDate.now()%>" name="date-birth" required />
     </div>
+    <div class="col-md-3 mb-3">
+      <label for="pass_word">Contraseña</label>
+      <input type="password" pattern="^(?=\w*\d)(?=\w*[a-z])\S{3,16}$" oninvalid="setCustomValidity('Asegure que la contraseña tenga:\n - mínimo 3 caracteres\n - una letra\n - un número')" onchange="try{setCustomValidity('')}catch(e){}"
+      class="form-control" id="pass_word" name="password" value="" required placeholder="Contraseña">
     </div>
-    <div class="form-row">
-    <% if(session.getAttribute("user").getClass() == Persona.class) { %>
-    <div class="col-md-4 mx-4 mb-4">
-    	<input class="form-check-input" type="checkbox" name="isregular" value="1" id="isregular" <%=a.isRegular()?"checked":"" %>>
-		<label class="form-check-label mx-1 mt-1" for="isregular">Regular</label>
-	</div>
-	<% } %>
-  </div>
-  <div class="form-row">
-  	<a href="#"><span class="link mb-4 mt-3 m-2">Cambiar contraseña</span></a>
   </div>
   <div class="row align-bottom">
   <button class="btn btn-lg btn-primary btn-block mt-4 mx-3" type="submit" style="border-color: #202f81; background-color: #07393b;width: 170px; height: 48px">Confirmar</button>

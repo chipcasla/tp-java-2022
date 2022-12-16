@@ -50,6 +50,7 @@
   <% } %>
 </div>
 <div class="form-row" >
+<input type="hidden" id="opcion" name="opc" value="">
 <div class="col-md-2 mb-3">
       <label for="validationDefault01">Legajo</label>
       <input type="text" class="form-control" id="validationDefault01" name="legajo" required placeholder="Legajo" 

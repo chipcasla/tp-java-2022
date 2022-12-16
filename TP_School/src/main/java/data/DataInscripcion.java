@@ -128,7 +128,7 @@ public class DataInscripcion {
 			stmt.setInt(2, i.getCurso().getIdModalidad());
 			stmt.setObject(3, i.getFechaInscripcion());
 			stmt.setInt(4, i.getAlumno().getIdAlumno());
-			stmt.setObject(5, i.getAlumno().getUltInscripcion());
+			stmt.setObject(5, i.getAlumno().getUltInscripcion().getFechaInscripcion());
 			
 			stmt.executeUpdate();
 		} catch (SQLException e) {

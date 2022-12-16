@@ -9,10 +9,12 @@ public class NuevaInscripcion {
 	
 	private DataInscripcion di;
 	private DataCurso dc;
+	private DataNota dn;
 	
 	public NuevaInscripcion() {
 		di=new DataInscripcion();
 		dc=new DataCurso();
+		dn=new DataNota();
 	}
 	
 	public LinkedList<Inscripcion> misInscripciones(Alumno a) {
@@ -27,6 +29,38 @@ public class NuevaInscripcion {
 	
 	public Curso cursoPorNombre(Curso c) {
 		return dc.getByName(c);
+	}
+	
+	public Inscripcion updInscripcion(Alumno alumno, Curso curso) {
+		Inscripcion i = null;
+		if(alumno.getUltInscripcion() == null) {
+			di.setUltimaInscripcion(alumno);
+		}
+		if(alumno.getUltInscripcion().getCurso().getIdCurso() == curso.getIdCurso()) {
+				i = new Inscripcion(alumno,curso, LocalDate.now());
+				di.updateInscripcion(i);
+			}
+			
+		return i;
+	}
+	
+	public Alumno dltInscripcion(Alumno alumno, Inscripcion insToDlt) {
+		
+		di.delete(insToDlt);
+		di.setUltimaInscripcion(alumno);
+		return alumno;
+		
+	}
+	
+	public boolean estaHabilitado(Alumno a) {
+		LinkedList<Nota> notas = dn.getMisNotas(a,a.getUltInscripcion().getCurso().getIdCurso(),a.getUltInscripcion().getCurso().getIdModalidad());
+		int aprobadas = 0;
+		for (Nota n : notas) {
+			if(n.getNotaFinal() >= 6) {
+				aprobadas = aprobadas + 1;
+			}
+		}
+		return aprobadas >= (notas.size()-2);
 	}
 	
 	public Inscripcion inscribirse(Alumno alumno, Curso curso) {

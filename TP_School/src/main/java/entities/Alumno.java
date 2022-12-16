@@ -3,18 +3,13 @@ package entities;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class Alumno {
+public class Alumno extends Persona{
 	
 	final private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/uuuu");
-	private int idAlumno;
 	private int legajo;
-	private String nombre;
-	private String apellido;
 	private String dni;
+	private String tel;	
 	private LocalDate fechaNac;
-	private String mail;
-	private String password;
-	private String tel;
 	private boolean regular;
 	private Inscripcion ultInscripcion;
 	
@@ -23,25 +18,22 @@ public class Alumno {
 	}	
 	
 	public Alumno(int id,int legajo, String nombre, String apellido, String dni, LocalDate fechaNac, 
-			String mail, String tel, Inscripcion inscripcionUlt) {
-		this.idAlumno = id;
+			String mail, String tel) {
+		super(id, nombre, apellido, mail);
 		this.legajo = legajo;
-		this.nombre = nombre;
-		this.apellido = apellido;
 		this.dni = dni;
-		this.fechaNac = fechaNac;
-		this.mail = mail;
 		this.tel = tel;
+		this.fechaNac = fechaNac;
 		this.regular = true;
-		this.ultInscripcion = inscripcionUlt;
+		
 	}
 	
 	public int getIdAlumno() {
-		return idAlumno;
+		return id;
 	}
 
 	public void setIdAlumno(int idAlumno) {
-		this.idAlumno = idAlumno;
+		this.id = idAlumno;
 	}
 	
 	public int getLegajo() {
@@ -127,6 +119,14 @@ public class Alumno {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "Alumno [legajo=" + legajo + ", dni=" + dni + ", tel=" + tel + ", fechaNac="
+				+ fechaNac + ", regular=" + regular + ", id=" + id + ", nombre="
+				+ nombre + ", apellido=" + apellido + ", mail=" + mail + ", password=" + password + "]";
+	}
+	
 	
 	
 	
