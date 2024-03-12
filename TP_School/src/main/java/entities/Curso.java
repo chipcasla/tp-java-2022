@@ -6,6 +6,7 @@ public class Curso {
 	private String nombre;
 	private int idModalidad;
 	private String modalidad;
+	private int activo;
 	
 	public Curso() {
 	
@@ -50,8 +51,12 @@ public class Curso {
 		this.modalidad = modalidad;
 	}
 	
-	
-	
-	
+	public int esActivo() {
+		return activo;
+	}
 
+	public void setActivo(int act) {
+		this.activo = act;
+	}
+		
 }

@@ -4,8 +4,10 @@ public class Asignatura {
 	
 	private Curso curso;
 	private Materia materia;
+	private Profesor profesor; 
+	private int activo;
 	
-	Asignatura() {	
+	public Asignatura() {	
 	}
 
 	public Asignatura(Curso curso, Materia m) {
@@ -24,8 +26,25 @@ public class Asignatura {
 	public Materia getMateria() {
 		return materia;
 	}
-
+	
 	public void setMateria(Materia m) {
 		this.materia = m;
 	}
+	
+	public Profesor getProfesor() {
+		return profesor;
+	}
+	
+	public void setProfesor(Profesor profesor) {
+		this.profesor = profesor;
+	}
+	
+	public int esActivo() {
+		return activo;
+	}
+	
+	public void setActivo(int activo) {
+		this.activo = activo;
+	}
+	
 }

@@ -7,7 +7,7 @@ import java.util.LinkedList;
 
 public class DataInscripcion {
 	
-	public void setUltimaInscripcion(Alumno alu) {
+	public Alumno setUltimaInscripcion(Alumno alu) {
 		PreparedStatement stmt=null;
 		ResultSet rs=null;
 		Inscripcion i;
@@ -32,9 +32,9 @@ public class DataInscripcion {
 				c = dc.getById(c);
 				i = new Inscripcion(alu,c,rs.getObject("fechaInscripcion", LocalDate.class));
 				alu.setUltInscripcion(i);
-				}
+			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new AppException("Error de base de datos. \n"+ e.getMessage());
 		}finally {
 			try {
 				if(rs!=null) {rs.close();}
@@ -44,7 +44,7 @@ public class DataInscripcion {
 				e.printStackTrace();
 			}
 		}
-		
+		return alu;
 	}
 	
 	
@@ -106,7 +106,7 @@ public class DataInscripcion {
 			stmt.executeUpdate();
 			
 		}  catch (SQLException e) {
-            e.printStackTrace();
+            throw new AppException("Error en base de datos. \n"+e.getMessage());
 		} finally {
             try {
                 if(stmt!=null)stmt.close();

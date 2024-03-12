@@ -7,6 +7,7 @@ public class Persona {
 	protected String apellido;
 	protected String mail;
 	protected String password;
+	protected String tipo;
 	
 	public Persona() {
 		
@@ -23,8 +24,8 @@ public class Persona {
 		return id;
 	}
 
-	public void setId(int idAlumno) {
-		this.id = idAlumno;
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNombre() {
@@ -58,5 +59,13 @@ public class Persona {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public String getTipo() {
+		return tipo;
+	}
 
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	
 }
