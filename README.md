@@ -11,8 +11,7 @@
 >>* **RN3:** Un alumno podrá inscribirse a un ÚNICO curso por año, sí y solo sí, no haya desaprobado más de dos materias en el curso anterior.<br />
 >>* **RN4:** Una inscripción de un alumno a un curso podrá eliminarse/editarse sólo habiendo pasado no más de dos meses de ser generada.<br />
 
-![WhatsApp Image 2022-12-16 at 08 38 47](https://user-images.githubusercontent.com/103225088/208100861-cfe03e32-f259-4061-bd30-1c96b09a3103.jpeg)
-
+![Screenshot_20240312-123026_Drive](https://github.com/chipcasla/tp-java-2022/assets/103225088/90db9b73-ecbc-49c2-9b8f-42f5918c22ed)
 
 **REQUERIMIENTOS REGULARIDAD**
 
